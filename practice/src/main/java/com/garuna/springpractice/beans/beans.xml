@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	default-init-method="init" default-destroy-method="destroy"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+
+
+	<bean id="person" class="com.garuna.springpractice.Person"
+		init-method="onCreate" destroy-method="onDestroy"
+		factory-method="getInstance" >
+		<constructor-arg value="777"></constructor-arg>
+		<constructor-arg value="${jdbc.user}"></constructor-arg>
+		<property name="taxId" value="123"></property>
+
+		<property name="defaultAddress" ref="address1"></property>
+		<property name="addresses">
+			<list>
+				<ref bean="address1" />
+				<ref bean="address2" />
+				<ref bean="address3" />
+			</list>
+		</property>
+		<property name="qualities">
+			<props>
+				<prop key="health">"#{100+500}"</prop>
+				<prop key="health1">"200"</prop>
+				<prop key="health2">"300"</prop>
+				<prop key="health3">"400"</prop>
+				<prop key="health4">"500"</prop>
+			</props>
+		</property>
+		<property name="mapAddresses">
+			<map>
+				<entry key="address1" value-ref="address1"></entry>
+				<entry key="address2" value-ref="address2"></entry>
+				<entry key="address3" value-ref="address3"></entry>
+			</map>
+		</property>
+		
+	</bean>
+
+	<bean id="address" class="com.garuna.springpractice.Address">
+		<constructor-arg value="766"></constructor-arg>
+		<constructor-arg value="Anurag's house"></constructor-arg>
+	</bean>
+
+	<bean id="address1" class="com.garuna.springpractice.Address">
+		<constructor-arg value="766"></constructor-arg>
+		<constructor-arg value="Anurag's house"></constructor-arg>
+	</bean>
+	<bean id="address2" class="com.garuna.springpractice.Address">
+		<constructor-arg value="755"></constructor-arg>
+		<constructor-arg value="Arnab's house"></constructor-arg>
+	</bean>
+
+	<bean id="address3" class="com.garuna.springpractice.Address">
+		<constructor-arg value="744"></constructor-arg>
+		<constructor-arg value="Mittal's house"></constructor-arg>
+	</bean>
+
+	<bean id="personfactory" class="com.garuna.springpractice.PersonFactory">
+	</bean>
+	
+	<bean id="personlocation"
+		class="com.garuna.springpractice.PersonLocation"
+		autowire="constructor">
+	</bean>
+	<!-- 
+	<bean id="logger" class="com.garuna.springpractice.Logger">
+
+	</bean>
+
+	<bean id="consoleWriter" class="com.garuna.springpractice.ConsoleWriter">
+		<qualifier value="toconsole"></qualifier>
+	</bean>
+
+	<bean id="squirrel" class="com.garuna.springpractice.ConsoleWriter">
+	</bean>
+
+	<bean id="mongoose" class="com.garuna.springpractice.FileWriter">
+	</bean> -->
+
+	<context:annotation-config></context:annotation-config>
+	<context:component-scan base-package="com.garuna.springpractice"></context:component-scan>
+	<context:property-placeholder
+		location="com/garuna/springpractice/properties/jdbc.properties" />
+	
+	<bean id="dataSource"
+		class="org.apache.commons.dbcp.BasicDataSource">
+	<property name="url" value="${jdbc.url}"></property>
+	<property name="username" value="${jdbc.user}"></property>
+	<property name="password" value="${jdbc.password}"></property>
+	<property name="driverClassName" value="${jdbc.driver}"></property>
+	</bean>
+</beans>
